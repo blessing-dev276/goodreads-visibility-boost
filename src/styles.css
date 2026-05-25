@@ -142,5 +142,10 @@
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  .font-serif, h1, h2, h3 {
+    font-family: 'Cormorant Garamond', Georgia, serif;
   }
 }
