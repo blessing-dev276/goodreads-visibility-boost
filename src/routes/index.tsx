@@ -24,16 +24,15 @@ function Index() {
   const [form, setForm] = useState({ name: "", email: "", book: "", date: "", time: "", notes: "" });
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
+  const [timezone, setTimezone] = useState("UTC");
+  const [minDate, setMinDate] = useState("");
 
-  const timezone =
-    typeof Intl !== "undefined" ? Intl.DateTimeFormat().resolvedOptions().timeZone : "UTC";
-
-  // Minimum date = tomorrow
-  const minDate = (() => {
+  useState(() => {
+    setTimezone(Intl.DateTimeFormat().resolvedOptions().timeZone);
     const d = new Date();
     d.setDate(d.getDate() + 1);
-    return d.toISOString().slice(0, 10);
-  })();
+    setMinDate(d.toISOString().slice(0, 10));
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -168,7 +167,7 @@ function Index() {
           <p className="text-sm uppercase tracking-widest text-accent font-medium mb-3">About</p>
           <h2 className="font-serif text-4xl md:text-5xl tracking-tight mb-6">Hi, I'm Daniel Brown.</h2>
           <p className="text-lg text-muted-foreground leading-relaxed mb-6">
-            Based in the United States, I've spent years helping authors break through the noise of Goodreads. Listopia is one of the most overlooked discovery engines on the platform — and I know exactly how to make it work for your book.
+          Based in the United Kingdom, I've spent years helping authors break through the noise of Goodreads. Listopia is one of the most overlooked discovery engines on the platform — and I know exactly how to make it work for your book.
           </p>
           <div className="flex flex-wrap justify-center gap-4 text-sm">
             {["Ethical methods", "Genre expertise", "Transparent reporting", "Real reader reach"].map((b) => (
@@ -235,7 +234,7 @@ function Index() {
             )}
             <div className="mt-8 pt-8 border-t border-border flex flex-wrap gap-6 text-sm text-muted-foreground justify-center">
               <span className="inline-flex items-center gap-2"><Mail className="w-4 h-4 text-accent" /> dannabrownq@gmail.com</span>
-              <span className="inline-flex items-center gap-2"><MapPin className="w-4 h-4 text-accent" /> United States</span>
+              <span className="inline-flex items-center gap-2"><MapPin className="w-4 h-4 text-accent" /> United Kingdom</span>
             </div>
           </Card>
         </div>
