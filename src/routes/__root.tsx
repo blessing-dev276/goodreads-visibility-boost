@@ -77,6 +77,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "author", content: "Daniel Brown" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
+      { property: "og:title", content: "Daniel Brown — Goodreads Listopia Ranking Specialist" },
+      { name: "twitter:title", content: "Daniel Brown — Goodreads Listopia Ranking Specialist" },
+      { property: "og:description", content: "Boost your book's visibility with expert Goodreads Listopia listing and ranking services." },
+      { name: "twitter:description", content: "Boost your book's visibility with expert Goodreads Listopia listing and ranking services." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/02edd6a6-6794-4c50-a89d-2d5f8a6911ca/id-preview-b2d7f4a7--a9e8cd44-3cbd-434f-9740-7644ef44abed.lovable.app-1779748095976.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/02edd6a6-6794-4c50-a89d-2d5f8a6911ca/id-preview-b2d7f4a7--a9e8cd44-3cbd-434f-9740-7644ef44abed.lovable.app-1779748095976.png" },
     ],
     links: [
       {
