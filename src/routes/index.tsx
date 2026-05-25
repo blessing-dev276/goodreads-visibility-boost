@@ -1,9 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { BookOpen, TrendingUp, Star, Mail, MapPin, Check, ArrowRight, Trophy, Users, Target } from "lucide-react";
+import { useServerFn } from "@tanstack/react-start";
+import { BookOpen, TrendingUp, Star, Mail, MapPin, Check, ArrowRight, Trophy, Users, Target, Calendar as CalendarIcon, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import danielImg from "@/assets/daniel-brown.png";
+import { bookAuditCall } from "@/lib/booking.functions";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -18,15 +20,33 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  const [form, setForm] = useState({ name: "", email: "", book: "", message: "" });
+  const bookFn = useServerFn(bookAuditCall);
+  const [form, setForm] = useState({ name: "", email: "", book: "", date: "", time: "", notes: "" });
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [errorMsg, setErrorMsg] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const timezone =
+    typeof Intl !== "undefined" ? Intl.DateTimeFormat().resolvedOptions().timeZone : "UTC";
+
+  // Minimum date = tomorrow
+  const minDate = (() => {
+    const d = new Date();
+    d.setDate(d.getDate() + 1);
+    return d.toISOString().slice(0, 10);
+  })();
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const subject = encodeURIComponent(`Listopia Inquiry from ${form.name}`);
-    const body = encodeURIComponent(
-      `Name: ${form.name}\nEmail: ${form.email}\nBook: ${form.book}\n\n${form.message}`
-    );
-    window.location.href = `mailto:dannabrownq@gmail.com?subject=${subject}&body=${body}`;
+    setStatus("loading");
+    setErrorMsg("");
+    try {
+      await bookFn({ data: { ...form, timezone } });
+      setStatus("success");
+      setForm({ name: "", email: "", book: "", date: "", time: "", notes: "" });
+    } catch (err) {
+      setStatus("error");
+      setErrorMsg(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+    }
   };
 
   return (
@@ -45,7 +65,7 @@ function Index() {
             <a href="#contact" className="hover:text-foreground transition">Contact</a>
           </nav>
           <Button asChild size="sm" className="bg-foreground text-background hover:bg-foreground/90">
-            <a href="#contact">Get Started</a>
+            <a href="#contact">Book a Call</a>
           </Button>
         </div>
       </header>
@@ -66,7 +86,7 @@ function Index() {
             </p>
             <div className="flex flex-wrap gap-3">
               <Button asChild size="lg" className="bg-foreground text-background hover:bg-foreground/90">
-                <a href="#contact">Boost My Book <ArrowRight className="w-4 h-4 ml-1" /></a>
+                <a href="#contact">Book a Free Audit <ArrowRight className="w-4 h-4 ml-1" /></a>
               </Button>
               <Button asChild size="lg" variant="outline">
                 <a href="#services">View Services</a>
@@ -164,22 +184,55 @@ function Index() {
       <section id="contact" className="py-24">
         <div className="max-w-3xl mx-auto px-6">
           <div className="text-center mb-12">
-            <p className="text-sm uppercase tracking-widest text-accent font-medium mb-3">Contact</p>
-            <h2 className="font-serif text-4xl md:text-5xl tracking-tight mb-4">Let's get your book noticed.</h2>
-            <p className="text-muted-foreground">Tell me about your book — I'll reply within 24 hours.</p>
+            <p className="text-sm uppercase tracking-widest text-accent font-medium mb-3">Book a Call</p>
+            <h2 className="font-serif text-4xl md:text-5xl tracking-tight mb-4">Book your free Listopia audit call.</h2>
+            <p className="text-muted-foreground">Pick a time that works — the call lands straight on my calendar and you'll get a confirmation invite by email.</p>
           </div>
           <Card className="p-8 border-border">
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid md:grid-cols-2 gap-4">
-                <input required placeholder="Your name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-ring" />
-                <input required type="email" placeholder="Email address" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-ring" />
+            {status === "success" ? (
+              <div className="text-center py-8">
+                <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-accent/15 flex items-center justify-center">
+                  <Check className="w-7 h-7 text-accent" />
+                </div>
+                <h3 className="font-serif text-2xl mb-2">Your audit call is booked.</h3>
+                <p className="text-muted-foreground mb-6">
+                  Check your inbox — Google Calendar has sent you the invite. I'll see you on the call.
+                </p>
+                <Button variant="outline" onClick={() => setStatus("idle")}>Book another time</Button>
               </div>
-              <input placeholder="Book title & genre" value={form.book} onChange={(e) => setForm({ ...form, book: e.target.value })} className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-ring" />
-              <textarea required rows={5} placeholder="Tell me about your goals..." value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-ring resize-none" />
-              <Button type="submit" size="lg" className="w-full bg-foreground text-background hover:bg-foreground/90">
-                Send Inquiry <ArrowRight className="w-4 h-4 ml-1" />
-              </Button>
-            </form>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="grid md:grid-cols-2 gap-4">
+                  <input required placeholder="Your name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-ring" />
+                  <input required type="email" placeholder="Email address" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-ring" />
+                </div>
+                <input placeholder="Book title & genre (optional)" value={form.book} onChange={(e) => setForm({ ...form, book: e.target.value })} className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-ring" />
+                <div className="grid md:grid-cols-2 gap-4">
+                  <label className="block">
+                    <span className="text-xs text-muted-foreground mb-1 block">Preferred date</span>
+                    <input required type="date" min={minDate} value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-ring" />
+                  </label>
+                  <label className="block">
+                    <span className="text-xs text-muted-foreground mb-1 block">Preferred time ({timezone})</span>
+                    <input required type="time" value={form.time} onChange={(e) => setForm({ ...form, time: e.target.value })} className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-ring" />
+                  </label>
+                </div>
+                <textarea rows={4} placeholder="Anything you'd like me to prep for the audit? (optional)" value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-ring resize-none" />
+                {status === "error" && (
+                  <p className="text-sm text-destructive">{errorMsg}</p>
+                )}
+                <Button type="submit" size="lg" disabled={status === "loading"} className="w-full bg-foreground text-background hover:bg-foreground/90">
+                  {status === "loading" ? (
+                    <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Booking your call…</>
+                  ) : (
+                    <><CalendarIcon className="w-4 h-4 mr-2" /> Book My Audit Call</>
+                  )}
+                </Button>
+                <p className="text-xs text-muted-foreground text-center">
+                  30-minute call · You'll receive a Google Calendar invite by email.
+                </p>
+              </form>
+            )}
             <div className="mt-8 pt-8 border-t border-border flex flex-wrap gap-6 text-sm text-muted-foreground justify-center">
               <span className="inline-flex items-center gap-2"><Mail className="w-4 h-4 text-accent" /> dannabrownq@gmail.com</span>
               <span className="inline-flex items-center gap-2"><MapPin className="w-4 h-4 text-accent" /> United States</span>
