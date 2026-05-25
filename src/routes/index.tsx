@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { BookOpen, TrendingUp, Star, Mail, MapPin, Check, ArrowRight, Trophy, Users, Target, Calendar as CalendarIcon, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -27,12 +27,12 @@ function Index() {
   const [timezone, setTimezone] = useState("UTC");
   const [minDate, setMinDate] = useState("");
 
-  useState(() => {
+  useEffect(() => {
     setTimezone(Intl.DateTimeFormat().resolvedOptions().timeZone);
     const d = new Date();
     d.setDate(d.getDate() + 1);
     setMinDate(d.toISOString().slice(0, 10));
-  });
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
