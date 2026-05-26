@@ -15,6 +15,30 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: "Goodreads Listopia Rankings — Dan Brown" },
       { property: "og:description", content: "Get your book on top Goodreads Listopia lists and reach thousands of readers." },
     ],
+    links: [
+      { rel: "canonical", href: "https://danbrown.lovable.app/" },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "ProfessionalService",
+          name: "Dan Brown — Goodreads Listopia Ranking Specialist",
+          description:
+            "Expert Goodreads Listopia listing and ranking services that boost book visibility and reach the right readers.",
+          areaServed: "Worldwide",
+          provider: {
+            "@type": "Person",
+            name: "Dan Brown",
+            jobTitle: "Goodreads Listopia Ranking Specialist",
+            email: "mailto:dannabrownq@gmail.com",
+            address: { "@type": "PostalAddress", addressCountry: "GB" },
+          },
+          url: "https://danbrown.lovable.app/",
+        }),
+      },
+    ],
   }),
   component: Index,
 });
