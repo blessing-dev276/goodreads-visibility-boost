@@ -10,9 +10,9 @@ import { bookAuditCall } from "@/lib/booking.functions";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Goodreads Listopia Rankings & Book Visibility — Daniel Brown" },
-      { name: "description", content: "Boost your book's discoverability with expert Goodreads Listopia listing and ranking services by Daniel Brown." },
-      { property: "og:title", content: "Goodreads Listopia Rankings — Daniel Brown" },
+      { title: "Goodreads Listopia Rankings & Book Visibility — Dan Brown" },
+      { name: "description", content: "Boost your book's discoverability with expert Goodreads Listopia listing and ranking services by Dan Brown." },
+      { property: "og:title", content: "Goodreads Listopia Rankings — Dan Brown" },
       { property: "og:description", content: "Get your book on top Goodreads Listopia lists and reach thousands of readers." },
     ],
   }),
@@ -55,7 +55,7 @@ function Index() {
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <a href="#top" className="flex items-center gap-2 font-serif text-xl font-semibold">
             <BookOpen className="w-5 h-5 text-accent" />
-            Daniel Brown
+            Dan Brown
           </a>
           <nav className="hidden md:flex gap-8 text-sm text-muted-foreground">
             <a href="#services" className="hover:text-foreground transition">Services</a>
@@ -101,7 +101,7 @@ function Index() {
             <div className="absolute -inset-4 bg-[var(--gradient-warm)] rounded-3xl blur-2xl opacity-20" />
             <img
               src={danielImg}
-              alt="Daniel Brown, Goodreads Listopia ranking specialist"
+              alt="Dan Brown, Goodreads Listopia ranking specialist"
               className="relative rounded-3xl w-full object-cover shadow-[var(--shadow-elegant)]"
             />
           </div>
@@ -165,7 +165,7 @@ function Index() {
       <section id="about" className="py-24 bg-secondary/40">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <p className="text-sm uppercase tracking-widest text-accent font-medium mb-3">About</p>
-          <h2 className="font-serif text-4xl md:text-5xl tracking-tight mb-6">Hi, I'm Daniel Brown.</h2>
+          <h2 className="font-serif text-4xl md:text-5xl tracking-tight mb-6">Hi, I'm Dan Brown.</h2>
           <p className="text-lg text-muted-foreground leading-relaxed mb-6">
           Based in the United Kingdom, I've spent years helping authors break through the noise of Goodreads. Listopia is one of the most overlooked discovery engines on the platform — and I know exactly how to make it work for your book.
           </p>
@@ -241,7 +241,7 @@ function Index() {
       </section>
 
       <footer className="py-8 border-t border-border text-center text-sm text-muted-foreground">
-        © {new Date().getFullYear()} Daniel Brown · Goodreads Listopia Specialist
+        © {new Date().getFullYear()} Dan Brown · Goodreads Listopia Specialist
       </footer>
     </div>
   );
