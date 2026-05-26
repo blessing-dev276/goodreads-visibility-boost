@@ -15,6 +15,30 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: "Goodreads Listopia Rankings — Dan Brown" },
       { property: "og:description", content: "Get your book on top Goodreads Listopia lists and reach thousands of readers." },
     ],
+    links: [
+      { rel: "canonical", href: "https://danbrown.lovable.app/" },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "ProfessionalService",
+          name: "Dan Brown — Goodreads Listopia Ranking Specialist",
+          description:
+            "Expert Goodreads Listopia listing and ranking services that boost book visibility and reach the right readers.",
+          areaServed: "Worldwide",
+          provider: {
+            "@type": "Person",
+            name: "Dan Brown",
+            jobTitle: "Goodreads Listopia Ranking Specialist",
+            email: "mailto:dannabrownq@gmail.com",
+            address: { "@type": "PostalAddress", addressCountry: "GB" },
+          },
+          url: "https://danbrown.lovable.app/",
+        }),
+      },
+    ],
   }),
   component: Index,
 });
@@ -69,6 +93,7 @@ function Index() {
         </div>
       </header>
 
+      <main>
       {/* Hero */}
       <section id="top" className="relative overflow-hidden">
         <div className="max-w-6xl mx-auto px-6 pt-20 pb-24 grid md:grid-cols-2 gap-12 items-center">
@@ -102,6 +127,9 @@ function Index() {
             <img
               src={danielImg}
               alt="Dan Brown, Goodreads Listopia ranking specialist"
+              width={800}
+              height={800}
+              fetchPriority="high"
               className="relative rounded-3xl w-full object-cover shadow-[var(--shadow-elegant)]"
             />
           </div>
@@ -233,12 +261,13 @@ function Index() {
               </form>
             )}
             <div className="mt-8 pt-8 border-t border-border flex flex-wrap gap-6 text-sm text-muted-foreground justify-center">
-              <span className="inline-flex items-center gap-2"><Mail className="w-4 h-4 text-accent" /> dannabrownq@gmail.com</span>
-              <span className="inline-flex items-center gap-2"><MapPin className="w-4 h-4 text-accent" /> United Kingdom</span>
+              <span className="inline-flex items-center gap-2"><Mail className="w-4 h-4 text-accent" /><span>dannabrownq@gmail.com</span></span>
+              <span className="inline-flex items-center gap-2"><MapPin className="w-4 h-4 text-accent" /><span>United Kingdom</span></span>
             </div>
           </Card>
         </div>
       </section>
+      </main>
 
       <footer className="py-8 border-t border-border text-center text-sm text-muted-foreground">
         © {new Date().getFullYear()} Dan Brown · Goodreads Listopia Specialist
