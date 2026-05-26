@@ -69,6 +69,7 @@ function Index() {
         </div>
       </header>
 
+      <main>
       {/* Hero */}
       <section id="top" className="relative overflow-hidden">
         <div className="max-w-6xl mx-auto px-6 pt-20 pb-24 grid md:grid-cols-2 gap-12 items-center">
@@ -102,6 +103,9 @@ function Index() {
             <img
               src={danielImg}
               alt="Dan Brown, Goodreads Listopia ranking specialist"
+              width={800}
+              height={800}
+              fetchPriority="high"
               className="relative rounded-3xl w-full object-cover shadow-[var(--shadow-elegant)]"
             />
           </div>
@@ -239,6 +243,7 @@ function Index() {
           </Card>
         </div>
       </section>
+      </main>
 
       <footer className="py-8 border-t border-border text-center text-sm text-muted-foreground">
         © {new Date().getFullYear()} Dan Brown · Goodreads Listopia Specialist
