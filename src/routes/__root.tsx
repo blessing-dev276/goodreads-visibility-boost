@@ -73,6 +73,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Dan Brown — Goodreads Listopia Ranking Specialist" },
+      { name: "google-site-verification", content: "vMvFM6X8POlE1qz3_E0VdZvZclqxKDZcf67oxRfTL30" },
       { name: "description", content: "Boost your book's visibility with expert Goodreads Listopia listing and ranking services." },
       { name: "author", content: "Dan Brown" },
       { property: "og:type", content: "website" },
