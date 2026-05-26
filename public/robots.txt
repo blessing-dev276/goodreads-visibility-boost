@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://danbrown.lovable.app/sitemap.xml
