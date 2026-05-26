@@ -10,9 +10,9 @@ import { bookAuditCall } from "@/lib/booking.functions";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Goodreads Listopia Rankings & Book Visibility — Daniel Brown" },
-      { name: "description", content: "Boost your book's discoverability with expert Goodreads Listopia listing and ranking services by Daniel Brown." },
-      { property: "og:title", content: "Goodreads Listopia Rankings — Daniel Brown" },
+      { title: "Goodreads Listopia Rankings & Book Visibility — Dan Brown" },
+      { name: "description", content: "Boost your book's discoverability with expert Goodreads Listopia listing and ranking services by Dan Brown." },
+      { property: "og:title", content: "Goodreads Listopia Rankings — Dan Brown" },
       { property: "og:description", content: "Get your book on top Goodreads Listopia lists and reach thousands of readers." },
     ],
   }),
