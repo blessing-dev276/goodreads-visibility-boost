@@ -233,8 +233,8 @@ function Index() {
               </form>
             )}
             <div className="mt-8 pt-8 border-t border-border flex flex-wrap gap-6 text-sm text-muted-foreground justify-center">
-              <span className="inline-flex items-center gap-2"><Mail className="w-4 h-4 text-accent" /> dannabrownq@gmail.com</span>
-              <span className="inline-flex items-center gap-2"><MapPin className="w-4 h-4 text-accent" /> United Kingdom</span>
+              <span className="inline-flex items-center gap-2"><Mail className="w-4 h-4 text-accent" /><span>dannabrownq@gmail.com</span></span>
+              <span className="inline-flex items-center gap-2"><MapPin className="w-4 h-4 text-accent" /><span>United Kingdom</span></span>
             </div>
           </Card>
         </div>
