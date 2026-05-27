@@ -9,6 +9,8 @@ import caseAlbert from "@/assets/case-albert-loftus.png";
 import caseLaurie from "@/assets/case-robert-laurie.png";
 import casePuche from "@/assets/case-puche-fernandez.png";
 import { bookAuditCall } from "@/lib/booking.functions";
+import { CalculatorsSection } from "@/components/CalculatorsSection";
+import { ExitIntentDialog } from "@/components/ExitIntentDialog";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -88,6 +90,7 @@ function Index() {
             <a href="#services" className="hover:text-foreground transition">Services</a>
             <a href="#how" className="hover:text-foreground transition">Process</a>
             <a href="#results" className="hover:text-foreground transition">Results</a>
+            <a href="#calculators" className="hover:text-foreground transition">Calculators</a>
             <a href="#about" className="hover:text-foreground transition">About</a>
             <a href="#contact" className="hover:text-foreground transition">Contact</a>
           </nav>
