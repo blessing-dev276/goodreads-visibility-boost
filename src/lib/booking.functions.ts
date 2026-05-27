@@ -56,3 +56,53 @@ export const bookAuditCall = createServerFn({ method: "POST" })
 
     return { ok: true as const, eventId: body.id as string, htmlLink: body.htmlLink as string };
   });
+
+const LeadSchema = z.object({
+  email: z.string().trim().email().max(255),
+  book: z.string().trim().min(1).max(200),
+});
+
+export const captureExitLead = createServerFn({ method: "POST" })
+  .inputValidator((input: unknown) => LeadSchema.parse(input))
+  .handler(async ({ data }) => {
+    const LOVABLE_API_KEY = process.env.LOVABLE_API_KEY;
+    if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
+    const GOOGLE_CALENDAR_API_KEY = process.env.GOOGLE_CALENDAR_API_KEY;
+    if (!GOOGLE_CALENDAR_API_KEY) throw new Error("GOOGLE_CALENDAR_API_KEY is not configured");
+
+    // Schedule a follow-up reminder on Dan's calendar (no attendees) the next day at 10:00 UTC.
+    const start = new Date();
+    start.setUTCDate(start.getUTCDate() + 1);
+    start.setUTCHours(10, 0, 0, 0);
+    const end = new Date(start.getTime() + 15 * 60 * 1000);
+
+    const event = {
+      summary: `Lead follow-up — ${data.email}`,
+      description:
+        `New exit-intent lead from danbrown.lovable.app\n\n` +
+        `Email: ${data.email}\n` +
+        `Book: ${data.book}\n\n` +
+        `Reach out to schedule the free Listopia audit.`,
+      start: { dateTime: start.toISOString().replace(/\.\d{3}Z$/, "Z"), timeZone: "UTC" },
+      end: { dateTime: end.toISOString().replace(/\.\d{3}Z$/, "Z"), timeZone: "UTC" },
+      reminders: { useDefault: true },
+    };
+
+    const res = await fetch(`${GATEWAY_URL}/calendars/primary/events`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${LOVABLE_API_KEY}`,
+        "X-Connection-Api-Key": GOOGLE_CALENDAR_API_KEY,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(event),
+    });
+
+    const body = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      console.error("Google Calendar create lead failed", res.status, body);
+      throw new Error(`Failed to save lead [${res.status}]`);
+    }
+
+    return { ok: true as const };
+  });
