@@ -198,6 +198,7 @@ function Index() {
         <div className="max-w-4xl mx-auto px-6 text-center">
           <p className="text-sm uppercase tracking-widest text-accent font-medium mb-3">About</p>
           <h2 className="font-serif text-4xl md:text-5xl tracking-tight mb-6">Hi, I'm Dan Brown.</h2>
+          {/* anchor */}
           <p className="text-lg text-muted-foreground leading-relaxed mb-6">
           Based in the United Kingdom, I've spent years helping authors break through the noise of Goodreads. Listopia is one of the most overlooked discovery engines on the platform — and I know exactly how to make it work for your book.
           </p>
