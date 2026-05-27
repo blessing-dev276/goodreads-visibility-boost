@@ -193,6 +193,66 @@ function Index() {
         </div>
       </section>
 
+      {/* Results / Proof of Work */}
+      <section id="results" className="py-24 bg-secondary/40">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="max-w-2xl mb-14">
+            <p className="text-sm uppercase tracking-widest text-accent font-medium mb-3">Proof of Work</p>
+            <h2 className="font-serif text-4xl md:text-5xl tracking-tight mb-4">Real books, real rankings.</h2>
+            <p className="text-muted-foreground">Before-and-after snapshots from recent Goodreads Listopia campaigns — each book climbed thousands of positions into the front pages readers actually browse.</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6">
+            {[
+              {
+                img: caseAlbert,
+                title: "The End of the River",
+                author: "Albert Loftus",
+                from: "#5,149",
+                to: "#99",
+                note: "Climbed into the top 100 of an AAPI Heritage Month list with 50+ supporting votes.",
+              },
+              {
+                img: caseLaurie,
+                title: "A Night to Forget",
+                author: "Robert Laurie",
+                from: "#8,462",
+                to: "#96",
+                note: "Broke into the top 100 of Big Books of Spring with 70+ reader votes.",
+              },
+              {
+                img: casePuche,
+                title: "Más Allá del Ictus",
+                author: "Francisco Javier Puche Fernández",
+                from: "#2,573",
+                to: "#130",
+                note: "Surged from page 26 onto page 2 of a biography & memoir list.",
+              },
+            ].map((c) => (
+              <Card key={c.title} className="overflow-hidden border-border bg-card hover:shadow-[var(--shadow-elegant)] transition-shadow">
+                <div className="aspect-[16/10] overflow-hidden bg-muted">
+                  <img
+                    src={c.img}
+                    alt={`Before and after Goodreads Listopia ranking for ${c.title} by ${c.author}`}
+                    loading="lazy"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="p-6">
+                  <h3 className="font-serif text-xl mb-1">{c.title}</h3>
+                  <p className="text-sm text-muted-foreground mb-4">by {c.author}</p>
+                  <div className="flex items-center gap-3 mb-4">
+                    <span className="text-xs px-2 py-1 rounded-full bg-secondary text-secondary-foreground">From {c.from}</span>
+                    <ArrowRight className="w-3 h-3 text-accent" />
+                    <span className="text-xs px-2 py-1 rounded-full bg-accent/15 text-accent font-medium">To {c.to}</span>
+                  </div>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{c.note}</p>
+                </div>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* About */}
       <section id="about" className="py-24 bg-secondary/40">
         <div className="max-w-4xl mx-auto px-6 text-center">
