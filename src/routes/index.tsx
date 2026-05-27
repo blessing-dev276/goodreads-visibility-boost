@@ -256,6 +256,9 @@ function Index() {
         </div>
       </section>
 
+      {/* Calculators */}
+      <CalculatorsSection />
+
       {/* About */}
       <section id="about" className="py-24 bg-secondary/40">
         <div className="max-w-4xl mx-auto px-6 text-center">
@@ -340,6 +343,7 @@ function Index() {
       <footer className="py-8 border-t border-border text-center text-sm text-muted-foreground">
         © {new Date().getFullYear()} Dan Brown · Goodreads Listopia Specialist
       </footer>
+      <ExitIntentDialog />
     </div>
   );
 }
