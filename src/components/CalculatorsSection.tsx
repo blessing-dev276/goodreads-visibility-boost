@@ -154,24 +154,45 @@ function AmazonRoyalty() {
   const [printColor, setPrintColor] = useState<"bw" | "color">("bw");
   const [copies, setCopies] = useState(100);
 
-  const royalty = useMemo(() => {
+  const compute = () => {
+    let per: number; let total: number; let rate: string; const inputs: Inputs = {
+      Format: format === "ebook" ? "Kindle eBook" : "Paperback",
+      "List price": usd(price),
+      "Copies sold": copies,
+    };
     if (format === "ebook") {
       const eligible70 = price >= 2.99 && price <= 9.99;
       const delivery = eligible70 ? fileMb * 0.15 : 0;
-      const rate = eligible70 ? 0.7 : 0.35;
-      const per = Math.max(0, (price - delivery) * rate);
-      return { per, total: per * copies, rate: `${rate * 100}%` };
+      const r = eligible70 ? 0.7 : 0.35;
+      per = Math.max(0, (price - delivery) * r);
+      total = per * copies;
+      rate = `${r * 100}%`;
+      inputs["File size (MB)"] = fileMb;
+    } else {
+      const printCost = printColor === "bw" ? 0.85 + 0.012 * pages : 1.0 + 0.07 * pages;
+      per = Math.max(0, price * 0.6 - printCost);
+      total = per * copies;
+      rate = "60%";
+      inputs["Pages"] = pages;
+      inputs["Interior"] = printColor === "bw" ? "Black & white" : "Color";
     }
-    // paperback: 60% royalty minus print cost
-    const printCost = printColor === "bw" ? 0.85 + 0.012 * pages : 1.0 + 0.07 * pages;
-    const per = Math.max(0, price * 0.6 - printCost);
-    return { per, total: per * copies, rate: "60%" };
-  }, [price, format, fileMb, pages, printColor, copies]);
+    return {
+      inputs,
+      results: [
+        { label: "Royalty rate", value: rate },
+        { label: "Royalty per copy", value: usd(per) },
+        { label: "Estimated total earnings", value: usd(total), accent: true },
+      ],
+    };
+  };
 
   return (
-    <div className="grid md:grid-cols-2 gap-6">
-      <div className="space-y-3">
-        <Field label="Format">
+    <CalcShell
+      name="Amazon Royalties"
+      compute={compute}
+      inputsNode={
+        <>
+          <Field label="Format">
           <Select value={format} onChange={(e) => setFormat(e.target.value as "ebook" | "paperback")}>
             <option value="ebook">Kindle eBook</option>
             <option value="paperback">Paperback</option>
@@ -200,14 +221,9 @@ function AmazonRoyalty() {
         <Field label="Copies sold">
           <Input type="number" min={0} value={copies} onChange={(e) => setCopies(+e.target.value)} />
         </Field>
-      </div>
-      <div className="space-y-3">
-        <Result label="Royalty rate" value={royalty.rate} />
-        <Result label="Royalty per copy" value={usd(royalty.per)} />
-        <Result label="Estimated total earnings" value={usd(royalty.total)} accent />
-        <p className="text-xs text-muted-foreground">Estimates based on Amazon KDP US marketplace rules. Actual payouts may vary by territory and currency.</p>
-      </div>
-    </div>
+        </>
+      }
+    />
   );
 }
 
@@ -217,32 +233,37 @@ function GoodreadsRanking() {
   const [listSize, setListSize] = useState(2000);
   const [monthlyVisitors, setMonthlyVisitors] = useState(15000);
 
-  const { ctr, impressions, clicks } = useMemo(() => {
-    // Click distribution roughly: top 10 = 60%, 11-25 = 20%, 26-50 = 10%, 51-100 = 6%, rest = 4%
+  const compute = () => {
     const c = rank <= 10 ? 0.06 : rank <= 25 ? 0.018 : rank <= 50 ? 0.0065 : rank <= 100 ? 0.0025 : 0.0006;
     const imp = monthlyVisitors * Math.min(1, 200 / Math.max(listSize, 50));
-    return { ctr: c, impressions: imp, clicks: imp * c };
-  }, [rank, listSize, monthlyVisitors]);
+    return {
+      inputs: { "Book rank": rank, "List size": listSize, "Monthly visitors": monthlyVisitors },
+      results: [
+        { label: "Estimated CTR at this rank", value: `${(c * 100).toFixed(2)}%` },
+        { label: "Monthly impressions", value: num(imp) },
+        { label: "Monthly reader clicks", value: num(imp * c), accent: true },
+      ],
+    };
+  };
 
   return (
-    <div className="grid md:grid-cols-2 gap-6">
-      <div className="space-y-3">
-        <Field label="Your book's rank on the list">
-          <Input type="number" min={1} value={rank} onChange={(e) => setRank(+e.target.value)} />
-        </Field>
-        <Field label="Total books on the list">
-          <Input type="number" min={1} value={listSize} onChange={(e) => setListSize(+e.target.value)} />
-        </Field>
-        <Field label="Estimated monthly list visitors" hint="Use 5k for niche lists, 50k+ for popular ones">
-          <Input type="number" min={0} value={monthlyVisitors} onChange={(e) => setMonthlyVisitors(+e.target.value)} />
-        </Field>
-      </div>
-      <div className="space-y-3">
-        <Result label="Estimated CTR at this rank" value={`${(ctr * 100).toFixed(2)}%`} />
-        <Result label="Monthly impressions" value={num(impressions)} />
-        <Result label="Monthly reader clicks" value={num(clicks)} accent />
-      </div>
-    </div>
+    <CalcShell
+      name="Goodreads Ranking"
+      compute={compute}
+      inputsNode={
+        <>
+          <Field label="Your book's rank on the list">
+            <Input type="number" min={1} value={rank} onChange={(e) => setRank(+e.target.value)} />
+          </Field>
+          <Field label="Total books on the list">
+            <Input type="number" min={1} value={listSize} onChange={(e) => setListSize(+e.target.value)} />
+          </Field>
+          <Field label="Estimated monthly list visitors" hint="Use 5k for niche lists, 50k+ for popular ones">
+            <Input type="number" min={0} value={monthlyVisitors} onChange={(e) => setMonthlyVisitors(+e.target.value)} />
+          </Field>
+        </>
+      }
+    />
   );
 }
 
@@ -252,29 +273,38 @@ function ROICalc() {
   const [extraSales, setExtraSales] = useState(120);
   const [royaltyPerSale, setRoyaltyPerSale] = useState(2.05);
 
-  const revenue = extraSales * royaltyPerSale;
-  const profit = revenue - spend;
-  const roi = spend > 0 ? (profit / spend) * 100 : 0;
+  const compute = () => {
+    const revenue = extraSales * royaltyPerSale;
+    const profit = revenue - spend;
+    const roi = spend > 0 ? (profit / spend) * 100 : 0;
+    return {
+      inputs: { "Campaign spend": usd(spend), "Extra sales": extraSales, "Royalty per sale": usd(royaltyPerSale) },
+      results: [
+        { label: "Added revenue", value: usd(revenue) },
+        { label: "Net profit", value: usd(profit) },
+        { label: "ROI", value: `${roi.toFixed(1)}%`, accent: true },
+      ],
+    };
+  };
 
   return (
-    <div className="grid md:grid-cols-2 gap-6">
-      <div className="space-y-3">
-        <Field label="Campaign spend (USD)">
-          <Input type="number" min={0} value={spend} onChange={(e) => setSpend(+e.target.value)} />
-        </Field>
-        <Field label="Additional sales attributed">
-          <Input type="number" min={0} value={extraSales} onChange={(e) => setExtraSales(+e.target.value)} />
-        </Field>
-        <Field label="Royalty per sale (USD)">
-          <Input type="number" min={0} step={0.01} value={royaltyPerSale} onChange={(e) => setRoyaltyPerSale(+e.target.value)} />
-        </Field>
-      </div>
-      <div className="space-y-3">
-        <Result label="Added revenue" value={usd(revenue)} />
-        <Result label="Net profit" value={usd(profit)} />
-        <Result label="ROI" value={`${roi.toFixed(1)}%`} accent />
-      </div>
-    </div>
+    <CalcShell
+      name="Campaign ROI"
+      compute={compute}
+      inputsNode={
+        <>
+          <Field label="Campaign spend (USD)">
+            <Input type="number" min={0} value={spend} onChange={(e) => setSpend(+e.target.value)} />
+          </Field>
+          <Field label="Additional sales attributed">
+            <Input type="number" min={0} value={extraSales} onChange={(e) => setExtraSales(+e.target.value)} />
+          </Field>
+          <Field label="Royalty per sale (USD)">
+            <Input type="number" min={0} step={0.01} value={royaltyPerSale} onChange={(e) => setRoyaltyPerSale(+e.target.value)} />
+          </Field>
+        </>
+      }
+    />
   );
 }
 
@@ -285,38 +315,43 @@ function VisibilityScore() {
   const [reviews, setReviews] = useState(40);
   const [rating, setRating] = useState(4.3);
 
-  const score = useMemo(() => {
+  const compute = () => {
     const listScore = Math.min(40, lists * 4);
     const rankScore = Math.max(0, 30 - Math.log10(Math.max(avgRank, 1)) * 10);
     const reviewScore = Math.min(15, Math.log10(reviews + 1) * 8);
     const ratingScore = Math.max(0, ((rating - 3) / 2) * 15);
-    return Math.round(listScore + rankScore + reviewScore + ratingScore);
-  }, [lists, avgRank, reviews, rating]);
-
-  const tier = score >= 80 ? "Excellent" : score >= 60 ? "Strong" : score >= 40 ? "Growing" : "Emerging";
+    const score = Math.round(listScore + rankScore + reviewScore + ratingScore);
+    const tier = score >= 80 ? "Excellent" : score >= 60 ? "Strong" : score >= 40 ? "Growing" : "Emerging";
+    return {
+      inputs: { Lists: lists, "Avg rank": avgRank, Reviews: reviews, Rating: rating },
+      results: [
+        { label: "Visibility score (0–100)", value: `${score}`, accent: true },
+        { label: "Tier", value: tier },
+      ],
+    };
+  };
 
   return (
-    <div className="grid md:grid-cols-2 gap-6">
-      <div className="space-y-3">
-        <Field label="Listopia lists you appear on">
-          <Input type="number" min={0} value={lists} onChange={(e) => setLists(+e.target.value)} />
-        </Field>
-        <Field label="Average rank across lists">
-          <Input type="number" min={1} value={avgRank} onChange={(e) => setAvgRank(+e.target.value)} />
-        </Field>
-        <Field label="Goodreads review count">
-          <Input type="number" min={0} value={reviews} onChange={(e) => setReviews(+e.target.value)} />
-        </Field>
-        <Field label="Average star rating">
-          <Input type="number" min={1} max={5} step={0.1} value={rating} onChange={(e) => setRating(+e.target.value)} />
-        </Field>
-      </div>
-      <div className="space-y-3">
-        <Result label="Visibility score (0–100)" value={`${score}`} accent />
-        <Result label="Tier" value={tier} />
-        <p className="text-xs text-muted-foreground">Composite signal — combines list presence, ranking depth, social proof, and rating quality.</p>
-      </div>
-    </div>
+    <CalcShell
+      name="Visibility Score"
+      compute={compute}
+      inputsNode={
+        <>
+          <Field label="Listopia lists you appear on">
+            <Input type="number" min={0} value={lists} onChange={(e) => setLists(+e.target.value)} />
+          </Field>
+          <Field label="Average rank across lists">
+            <Input type="number" min={1} value={avgRank} onChange={(e) => setAvgRank(+e.target.value)} />
+          </Field>
+          <Field label="Goodreads review count">
+            <Input type="number" min={0} value={reviews} onChange={(e) => setReviews(+e.target.value)} />
+          </Field>
+          <Field label="Average star rating">
+            <Input type="number" min={1} max={5} step={0.1} value={rating} onChange={(e) => setRating(+e.target.value)} />
+          </Field>
+        </>
+      }
+    />
   );
 }
 
@@ -324,23 +359,30 @@ function VisibilityScore() {
 function KUCalc() {
   const [pagesRead, setPagesRead] = useState(100000);
   const [rate, setRate] = useState(0.0045);
-  const earnings = pagesRead * rate;
+
+  const compute = () => ({
+    inputs: { "Pages read": pagesRead, "Rate per page": usd(rate) },
+    results: [
+      { label: "Estimated KU earnings", value: usd(pagesRead * rate), accent: true },
+      { label: "Effective per 1,000 pages", value: usd(rate * 1000) },
+    ],
+  });
 
   return (
-    <div className="grid md:grid-cols-2 gap-6">
-      <div className="space-y-3">
-        <Field label="KENP pages read">
-          <Input type="number" min={0} value={pagesRead} onChange={(e) => setPagesRead(+e.target.value)} />
-        </Field>
-        <Field label="KENP rate (USD per page)" hint="Recent KDP Select Global Fund rate is ~$0.0045">
-          <Input type="number" min={0} step={0.0001} value={rate} onChange={(e) => setRate(+e.target.value)} />
-        </Field>
-      </div>
-      <div className="space-y-3">
-        <Result label="Estimated KU earnings" value={usd(earnings)} accent />
-        <Result label="Effective per 1,000 pages" value={usd(rate * 1000)} />
-      </div>
-    </div>
+    <CalcShell
+      name="KU Pages"
+      compute={compute}
+      inputsNode={
+        <>
+          <Field label="KENP pages read">
+            <Input type="number" min={0} value={pagesRead} onChange={(e) => setPagesRead(+e.target.value)} />
+          </Field>
+          <Field label="KENP rate (USD per page)" hint="Recent KDP Select Global Fund rate is ~$0.0045">
+            <Input type="number" min={0} step={0.0001} value={rate} onChange={(e) => setRate(+e.target.value)} />
+          </Field>
+        </>
+      }
+    />
   );
 }
 
@@ -350,28 +392,37 @@ function ReachCalc() {
   const [avgVisitors, setAvgVisitors] = useState(12000);
   const [avgCTR, setAvgCTR] = useState(1.2);
 
-  const monthlyReach = lists * avgVisitors;
-  const clicks = (monthlyReach * avgCTR) / 100;
+  const compute = () => {
+    const monthlyReach = lists * avgVisitors;
+    const clicks = (monthlyReach * avgCTR) / 100;
+    return {
+      inputs: { Lists: lists, "Avg visitors / list": avgVisitors, "Avg CTR (%)": avgCTR },
+      results: [
+        { label: "Monthly impressions", value: num(monthlyReach) },
+        { label: "Estimated reader clicks", value: num(clicks), accent: true },
+        { label: "Annual reach", value: num(monthlyReach * 12) },
+      ],
+    };
+  };
 
   return (
-    <div className="grid md:grid-cols-2 gap-6">
-      <div className="space-y-3">
-        <Field label="Number of lists featured on">
-          <Input type="number" min={0} value={lists} onChange={(e) => setLists(+e.target.value)} />
-        </Field>
-        <Field label="Average monthly visitors per list">
-          <Input type="number" min={0} value={avgVisitors} onChange={(e) => setAvgVisitors(+e.target.value)} />
-        </Field>
-        <Field label="Average CTR (%)">
-          <Input type="number" min={0} step={0.1} value={avgCTR} onChange={(e) => setAvgCTR(+e.target.value)} />
-        </Field>
-      </div>
-      <div className="space-y-3">
-        <Result label="Monthly impressions" value={num(monthlyReach)} />
-        <Result label="Estimated reader clicks" value={num(clicks)} accent />
-        <Result label="Annual reach" value={num(monthlyReach * 12)} />
-      </div>
-    </div>
+    <CalcShell
+      name="Reach"
+      compute={compute}
+      inputsNode={
+        <>
+          <Field label="Number of lists featured on">
+            <Input type="number" min={0} value={lists} onChange={(e) => setLists(+e.target.value)} />
+          </Field>
+          <Field label="Average monthly visitors per list">
+            <Input type="number" min={0} value={avgVisitors} onChange={(e) => setAvgVisitors(+e.target.value)} />
+          </Field>
+          <Field label="Average CTR (%)">
+            <Input type="number" min={0} step={0.1} value={avgCTR} onChange={(e) => setAvgCTR(+e.target.value)} />
+          </Field>
+        </>
+      }
+    />
   );
 }
 
@@ -382,38 +433,51 @@ function ACXCalc() {
   const [sales, setSales] = useState(200);
   const [split, setSplit] = useState<"100" | "50">("100");
 
-  const rate = exclusivity === "exclusive" ? 0.4 : 0.25;
-  const authorShare = split === "100" ? 1 : 0.5;
-  const per = price * rate * authorShare;
-  const total = per * sales;
+  const compute = () => {
+    const rate = exclusivity === "exclusive" ? 0.4 : 0.25;
+    const authorShare = split === "100" ? 1 : 0.5;
+    const per = price * rate * authorShare;
+    return {
+      inputs: {
+        "List price": usd(price),
+        Distribution: exclusivity === "exclusive" ? "Exclusive (40%)" : "Non-exclusive (25%)",
+        Split: split === "100" ? "100% (PFP)" : "50/50 royalty share",
+        Units: sales,
+      },
+      results: [
+        { label: "Royalty per unit", value: usd(per) },
+        { label: "Total earnings", value: usd(per * sales), accent: true },
+      ],
+    };
+  };
 
   return (
-    <div className="grid md:grid-cols-2 gap-6">
-      <div className="space-y-3">
-        <Field label="Audiobook list price (USD)">
-          <Input type="number" min={0} step={0.01} value={price} onChange={(e) => setPrice(+e.target.value)} />
-        </Field>
-        <Field label="Distribution">
-          <Select value={exclusivity} onChange={(e) => setExclusivity(e.target.value as "exclusive" | "nonexclusive")}>
-            <option value="exclusive">Exclusive (40%)</option>
-            <option value="nonexclusive">Non-exclusive (25%)</option>
-          </Select>
-        </Field>
-        <Field label="Producer split">
-          <Select value={split} onChange={(e) => setSplit(e.target.value as "100" | "50")}>
-            <option value="100">Pay-for-production (you keep 100%)</option>
-            <option value="50">Royalty share (50/50 with narrator)</option>
-          </Select>
-        </Field>
-        <Field label="Units sold">
-          <Input type="number" min={0} value={sales} onChange={(e) => setSales(+e.target.value)} />
-        </Field>
-      </div>
-      <div className="space-y-3">
-        <Result label="Royalty per unit" value={usd(per)} />
-        <Result label="Total earnings" value={usd(total)} accent />
-      </div>
-    </div>
+    <CalcShell
+      name="ACX Audiobook"
+      compute={compute}
+      inputsNode={
+        <>
+          <Field label="Audiobook list price (USD)">
+            <Input type="number" min={0} step={0.01} value={price} onChange={(e) => setPrice(+e.target.value)} />
+          </Field>
+          <Field label="Distribution">
+            <Select value={exclusivity} onChange={(e) => setExclusivity(e.target.value as "exclusive" | "nonexclusive")}>
+              <option value="exclusive">Exclusive (40%)</option>
+              <option value="nonexclusive">Non-exclusive (25%)</option>
+            </Select>
+          </Field>
+          <Field label="Producer split">
+            <Select value={split} onChange={(e) => setSplit(e.target.value as "100" | "50")}>
+              <option value="100">Pay-for-production (you keep 100%)</option>
+              <option value="50">Royalty share (50/50 with narrator)</option>
+            </Select>
+          </Field>
+          <Field label="Units sold">
+            <Input type="number" min={0} value={sales} onChange={(e) => setSales(+e.target.value)} />
+          </Field>
+        </>
+      }
+    />
   );
 }
 
