@@ -1,7 +1,14 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Calculator, BookOpen, TrendingUp, DollarSign, Eye, Headphones, Library, Users } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useServerFn } from "@tanstack/react-start";
+import { toast } from "sonner";
+import { Calculator, BookOpen, TrendingUp, DollarSign, Eye, Headphones, Library, Users, Mail, Loader2 } from "lucide-react";
+import { emailCalculatorResult } from "@/lib/calculator-email.functions";
+
+type ResultRow = { label: string; value: string; accent?: boolean };
+type Inputs = Record<string, string | number>;
 
 const usd = (n: number) =>
   n.toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 2 });
@@ -40,6 +47,100 @@ function Result({ label, value, accent = false }: { label: string; value: string
     <div className={`p-4 rounded-md border ${accent ? "border-accent/40 bg-accent/10" : "border-border bg-secondary/50"}`}>
       <div className="text-xs text-muted-foreground">{label}</div>
       <div className={`font-serif text-2xl ${accent ? "text-accent" : ""}`}>{value}</div>
+    </div>
+  );
+}
+
+function ResultsPanel({
+  calculatorName,
+  inputs,
+  results,
+}: {
+  calculatorName: string;
+  inputs: Inputs;
+  results: ResultRow[];
+}) {
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "sending" | "sent">("idle");
+  const sendFn = useServerFn(emailCalculatorResult);
+
+  const onSend = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+    setStatus("sending");
+    try {
+      await sendFn({
+        data: {
+          email,
+          calculator: calculatorName,
+          inputs,
+          results: results.map((r) => ({ label: r.label, value: r.value })),
+        },
+      });
+      setStatus("sent");
+      toast.success("Results sent — check your inbox.");
+    } catch (err) {
+      console.error(err);
+      setStatus("idle");
+      toast.error("Couldn't send the email. Please try again.");
+    }
+  };
+
+  return (
+    <div className="space-y-3">
+      {results.map((r) => (
+        <Result key={r.label} label={r.label} value={r.value} accent={r.accent} />
+      ))}
+      <form onSubmit={onSend} className="pt-4 border-t border-border space-y-2">
+        <label className="text-xs text-muted-foreground block">
+          <Mail className="inline w-3.5 h-3.5 mr-1" /> Email a copy of these results
+        </label>
+        <div className="flex gap-2">
+          <Input
+            type="email"
+            required
+            placeholder="you@example.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            disabled={status === "sending" || status === "sent"}
+          />
+          <Button type="submit" disabled={status === "sending" || status === "sent"}>
+            {status === "sending" ? <Loader2 className="w-4 h-4 animate-spin" /> : status === "sent" ? "Sent" : "Send"}
+          </Button>
+        </div>
+      </form>
+    </div>
+  );
+}
+
+function CalcShell({
+  name,
+  inputsNode,
+  compute,
+}: {
+  name: string;
+  inputsNode: React.ReactNode;
+  compute: () => { inputs: Inputs; results: ResultRow[] };
+}) {
+  const [state, setState] = useState<{ inputs: Inputs; results: ResultRow[] } | null>(null);
+
+  return (
+    <div className="grid md:grid-cols-2 gap-6">
+      <div className="space-y-3">
+        {inputsNode}
+        <Button type="button" onClick={() => setState(compute())} className="w-full mt-2">
+          <Calculator className="w-4 h-4 mr-1.5" /> Calculate
+        </Button>
+      </div>
+      <div>
+        {state ? (
+          <ResultsPanel calculatorName={name} inputs={state.inputs} results={state.results} />
+        ) : (
+          <div className="h-full min-h-[200px] flex items-center justify-center rounded-md border border-dashed border-border text-sm text-muted-foreground text-center p-6">
+            Enter your numbers and press <span className="mx-1 font-medium">Calculate</span> to see results.
+          </div>
+        )}
+      </div>
     </div>
   );
 }
