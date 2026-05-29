@@ -153,6 +153,7 @@ function Index() {
               </div>
             </a>
           </div>
+        </div>
       </section>
 
       {/* Testimonials / Social Proof */}
