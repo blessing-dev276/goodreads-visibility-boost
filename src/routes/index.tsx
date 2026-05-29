@@ -8,6 +8,7 @@ import danielImg from "@/assets/daniel-brown.png";
 import caseAlbert from "@/assets/case-albert-loftus.png";
 import caseLaurie from "@/assets/case-robert-laurie.png";
 import casePuche from "@/assets/case-puche-fernandez.png";
+import powerOfFaithCover from "@/assets/power-of-faith-brandon-huffman.png";
 import { bookAuditCall } from "@/lib/booking.functions";
 import { CalculatorsSection } from "@/components/CalculatorsSection";
 import { ExitIntentDialog } from "@/components/ExitIntentDialog";
@@ -101,6 +102,60 @@ function Index() {
       </header>
 
       <main>
+      {/* Featured Author Spotlight */}
+      <section id="spotlight" className="relative overflow-hidden bg-foreground text-background">
+        <div className="max-w-6xl mx-auto px-6 pt-12 pb-16 grid md:grid-cols-2 gap-10 items-center">
+          <div className="order-2 md:order-1">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/20 text-accent text-xs font-medium mb-5">
+              <Star className="w-3 h-3 fill-accent text-accent" />
+              Featured Author Spotlight
+            </div>
+            <h2 className="font-serif text-3xl md:text-5xl leading-[1.05] tracking-tight mb-4">
+              Brandon Huffman — <em className="text-accent not-italic">The Power of Faith</em>
+            </h2>
+            <p className="text-base md:text-lg text-background/75 mb-6 max-w-lg">
+              Watch this exclusive author spotlight interview with Brandon Huffman and see how
+              Listopia visibility turns a single book into a movement of readers.
+            </p>
+            <div className="aspect-video w-full rounded-xl overflow-hidden shadow-[var(--shadow-elegant)] border border-background/10 mb-6">
+              <iframe
+                className="w-full h-full"
+                src="https://www.youtube.com/embed/KTmMkKiQHQ8?autoplay=1&mute=1&playsinline=1&rel=0"
+                title="Author Spotlight Interview — Brandon Huffman, The Power of Faith"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+                loading="lazy"
+              />
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
+                <a href="https://www.amazon.com/Power-Faith-Brandon-Huffman/dp/B0DHZZJ14W" target="_blank" rel="noopener noreferrer">
+                  Get the Book on Amazon <ArrowRight className="w-4 h-4 ml-1" />
+                </a>
+              </Button>
+              <Button asChild size="lg" variant="outline" className="bg-transparent border-background/30 text-background hover:bg-background/10 hover:text-background">
+                <a href="#contact">Get Ranked Like Brandon</a>
+              </Button>
+            </div>
+          </div>
+          <div className="order-1 md:order-2 relative">
+            <div className="absolute -inset-6 bg-[var(--gradient-warm)] rounded-3xl blur-3xl opacity-30" />
+            <a href="https://www.amazon.com/Power-Faith-Brandon-Huffman/dp/B0DHZZJ14W" target="_blank" rel="noopener noreferrer" className="relative block group">
+              <img
+                src={powerOfFaithCover}
+                alt="The Power of Faith by Brandon Huffman — featured author book cover"
+                width={640}
+                height={960}
+                className="relative rounded-2xl w-full max-w-sm mx-auto object-cover shadow-[var(--shadow-elegant)] transition-transform group-hover:-translate-y-1"
+              />
+              <div className="mt-4 text-center text-sm text-background/70 group-hover:text-background transition">
+                Tap the cover to view on Amazon →
+              </div>
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* Hero */}
       <section id="top" className="relative overflow-hidden">
         <div className="max-w-6xl mx-auto px-6 pt-20 pb-24 grid md:grid-cols-2 gap-12 items-center">
