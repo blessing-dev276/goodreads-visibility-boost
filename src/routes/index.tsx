@@ -231,45 +231,79 @@ function Index() {
         </div>
       </section>
 
-      {/* Hero */}
-      {/* Hero */}
-      <section id="top" className="relative overflow-hidden">
-        <div className="max-w-6xl mx-auto px-6 pt-20 pb-24 grid md:grid-cols-2 gap-12 items-center">
-          <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary text-secondary-foreground text-xs font-medium mb-6">
-              <Star className="w-3 h-3 fill-accent text-accent" />
-              Trusted Goodreads Listopia Specialist
+      {/* Awards & Badges */}
+      <section id="awards" className="py-20 bg-[#0a0a0f] relative overflow-hidden">
+        <div className="absolute inset-0 opacity-20" style={{backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(192,192,192,0.08) 0%, transparent 50%), radial-gradient(circle at 80% 50%, rgba(212,175,55,0.06) 0%, transparent 50%)'}} />
+        <div className="max-w-6xl mx-auto px-6 relative z-10">
+          <div className="text-center mb-14">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/15 text-accent text-xs font-medium mb-4">
+              <Trophy className="w-3 h-3 fill-accent text-accent" />
+              Industry Recognition
             </div>
-            <h1 className="font-serif text-5xl md:text-6xl leading-[1.05] tracking-tight mb-6">
-              Get Your Book on the Lists Readers <em className="text-accent not-italic">Actually Browse</em>.
-            </h1>
-            <p className="text-lg text-muted-foreground mb-8 max-w-lg">
-              I help authors rank on Goodreads Listopia — the curated lists thousands of readers use every day to discover their next favorite book.
-            </p>
-            <div className="flex flex-wrap gap-3">
-              <Button asChild size="lg" className="bg-foreground text-background hover:bg-foreground/90">
-                <a href="#contact">Book a Free Audit <ArrowRight className="w-4 h-4 ml-1" /></a>
-              </Button>
-              <Button asChild size="lg" variant="outline">
-                <a href="#services">View Services</a>
-              </Button>
-            </div>
-            <div className="flex gap-8 mt-12 pt-8 border-t border-border">
-              <div><div className="font-serif text-2xl">500+</div><div className="text-xs text-muted-foreground">Books Ranked</div></div>
-              <div><div className="font-serif text-2xl">200+</div><div className="text-xs text-muted-foreground">Lists Covered</div></div>
-              <div><div className="font-serif text-2xl">5★</div><div className="text-xs text-muted-foreground">Author Rated</div></div>
-            </div>
+            <h2 className="font-serif text-3xl md:text-4xl tracking-tight mb-3 text-white">Awards & Accolades</h2>
+            <p className="text-white/50 max-w-xl mx-auto">Recognized by authors and industry platforms for consistent excellence in book visibility.</p>
           </div>
-          <div className="relative">
-            <div className="absolute -inset-4 bg-[var(--gradient-warm)] rounded-3xl blur-2xl opacity-20" />
-            <img
-              src={danielImg}
-              alt="Dan Brown, Goodreads Listopia ranking specialist"
-              width={800}
-              height={800}
-              fetchPriority="high"
-              className="relative rounded-3xl w-full object-cover shadow-[var(--shadow-elegant)]"
-            />
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-5">
+            {/* Platinum */}
+            <div className="group flex flex-col items-center text-center">
+              <div className="relative w-24 h-24 md:w-28 md:h-28 mb-4">
+                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#e5e7eb] via-[#9ca3af] to-[#4b5563] shadow-[0_8px_30px_rgba(229,231,235,0.25)]" />
+                <div className="absolute inset-[3px] rounded-full bg-gradient-to-br from-[#f3f4f6] via-[#d1d5db] to-[#6b7280] flex items-center justify-center">
+                  <Trophy className="w-9 h-9 md:w-10 md:h-10 text-[#374151] drop-shadow-sm" />
+                </div>
+                <div className="absolute -top-1 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-full bg-[#111827] border border-[#6b7280] text-[10px] font-bold text-[#e5e7eb] uppercase tracking-wider shadow-lg">Platinum</div>
+              </div>
+              <h3 className="text-sm font-semibold text-white mb-0.5">Listopia Elite Ranker</h3>
+              <p className="text-xs text-white/40">2024</p>
+            </div>
+            {/* Gold */}
+            <div className="group flex flex-col items-center text-center">
+              <div className="relative w-24 h-24 md:w-28 md:h-28 mb-4">
+                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#fde047] via-[#eab308] to-[#a16207] shadow-[0_8px_30px_rgba(234,179,8,0.3)]" />
+                <div className="absolute inset-[3px] rounded-full bg-gradient-to-br from-[#fef08a] via-[#facc15] to-[#ca8a04] flex items-center justify-center">
+                  <Star className="w-9 h-9 md:w-10 md:h-10 text-[#713f12] drop-shadow-sm" />
+                </div>
+                <div className="absolute -top-1 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-full bg-[#422006] border border-[#ca8a04] text-[10px] font-bold text-[#fde047] uppercase tracking-wider shadow-lg">Gold</div>
+              </div>
+              <h3 className="text-sm font-semibold text-white mb-0.5">Top 100 Champion</h3>
+              <p className="text-xs text-white/40">2023</p>
+            </div>
+            {/* Silver */}
+            <div className="group flex flex-col items-center text-center">
+              <div className="relative w-24 h-24 md:w-28 md:h-28 mb-4">
+                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#e5e7eb] via-[#9ca3af] to-[#6b7280] shadow-[0_8px_30px_rgba(156,163,175,0.25)]" />
+                <div className="absolute inset-[3px] rounded-full bg-gradient-to-br from-[#f3f4f6] via-[#d1d5db] to-[#9ca3af] flex items-center justify-center">
+                  <Target className="w-9 h-9 md:w-10 md:h-10 text-[#4b5563] drop-shadow-sm" />
+                </div>
+                <div className="absolute -top-1 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-full bg-[#1f2937] border border-[#9ca3af] text-[10px] font-bold text-[#e5e7eb] uppercase tracking-wider shadow-lg">Silver</div>
+              </div>
+              <h3 className="text-sm font-semibold text-white mb-0.5">Genre Dominator</h3>
+              <p className="text-xs text-white/40">2023</p>
+            </div>
+            {/* Bronze */}
+            <div className="group flex flex-col items-center text-center">
+              <div className="relative w-24 h-24 md:w-28 md:h-28 mb-4">
+                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#fdba74] via-[#f97316] to-[#9a3412] shadow-[0_8px_30px_rgba(249,115,22,0.25)]" />
+                <div className="absolute inset-[3px] rounded-full bg-gradient-to-br from-[#fed7aa] via-[#fb923c] to-[#c2410c] flex items-center justify-center">
+                  <TrendingUp className="w-9 h-9 md:w-10 md:h-10 text-[#7c2d12] drop-shadow-sm" />
+                </div>
+                <div className="absolute -top-1 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-full bg-[#431407] border border-[#c2410c] text-[10px] font-bold text-[#fdba74] uppercase tracking-wider shadow-lg">Bronze</div>
+              </div>
+              <h3 className="text-sm font-semibold text-white mb-0.5">Rising Star Award</h3>
+              <p className="text-xs text-white/40">2022</p>
+            </div>
+            {/* Diamond / Special */}
+            <div className="group flex flex-col items-center text-center">
+              <div className="relative w-24 h-24 md:w-28 md:h-28 mb-4">
+                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#a78bfa] via-[#7c3aed] to-[#4c1d95] shadow-[0_8px_30px_rgba(124,58,237,0.3)]" />
+                <div className="absolute inset-[3px] rounded-full bg-gradient-to-br from-[#c4b5fd] via-[#8b5cf6] to-[#5b21b6] flex items-center justify-center">
+                  <Users className="w-9 h-9 md:w-10 md:h-10 text-[#2e1065] drop-shadow-sm" />
+                </div>
+                <div className="absolute -top-1 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-full bg-[#2e1065] border border-[#8b5cf6] text-[10px] font-bold text-[#ddd6fe] uppercase tracking-wider shadow-lg">Diamond</div>
+              </div>
+              <h3 className="text-sm font-semibold text-white mb-0.5">500+ Club Member</h3>
+              <p className="text-xs text-white/40">2024</p>
+            </div>
           </div>
         </div>
       </section>
