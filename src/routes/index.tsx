@@ -198,6 +198,38 @@ function Index() {
                 </div>
               </div>
             </Card>
+            <Card className="p-6 border-border bg-card">
+              <div className="flex items-center gap-1 mb-4">
+                {[1,2,3,4,5].map((n) => (<Star key={n} className="w-4 h-4 fill-accent text-accent" />))}
+              </div>
+              <p className="text-sm text-muted-foreground leading-relaxed mb-5">
+                "Professional, transparent, and effective. Dan explained every step and delivered results faster than promised. Highly recommend."
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center text-accent font-serif font-bold text-sm">FJ</div>
+                <div>
+                  <p className="text-sm font-medium">Francisco J. Puche</p>
+                  <p className="text-xs text-muted-foreground">Author, <em>Más Allá del Ictus</em></p>
+                </div>
+              </div>
+            </Card>
+          </div>
+          {/* Credibility Signals */}
+          <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+            {[
+              { num: "500+", label: "Books Ranked" },
+              { num: "200+", label: "Lists Covered" },
+              { num: "98%", label: "Success Rate" },
+              { num: "4.9★", label: "Average Rating" },
+            ].map((s) => (
+              <div key={s.label} className="p-4 rounded-xl bg-background border border-border">
+                <div className="font-serif text-2xl md:text-3xl text-foreground mb-1">{s.num}</div>
+                <div className="text-xs text-muted-foreground uppercase tracking-wider">{s.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* Awards & Badges */}
       <section id="awards" className="py-20 bg-[#0a0a0f] relative overflow-hidden">
@@ -272,82 +304,6 @@ function Index() {
               <h3 className="text-sm font-semibold text-white mb-0.5">500+ Club Member</h3>
               <p className="text-xs text-white/40">2024</p>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Services */}
-              <div className="flex items-center gap-1 mb-4">
-                {[1,2,3,4,5].map((n) => (<Star key={n} className="w-4 h-4 fill-accent text-accent" />))}
-              </div>
-              <p className="text-sm text-muted-foreground leading-relaxed mb-5">
-                "Professional, transparent, and effective. Dan explained every step and delivered results faster than promised. Highly recommend."
-              </p>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center text-accent font-serif font-bold text-sm">FJ</div>
-                <div>
-                  <p className="text-sm font-medium">Francisco J. Puche</p>
-                  <p className="text-xs text-muted-foreground">Author, <em>Más Allá del Ictus</em></p>
-                </div>
-              </div>
-            </Card>
-          </div>
-          {/* Credibility Signals */}
-          <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-            {[
-              { num: "500+", label: "Books Ranked" },
-              { num: "200+", label: "Lists Covered" },
-              { num: "98%", label: "Success Rate" },
-              { num: "4.9★", label: "Average Rating" },
-            ].map((s) => (
-              <div key={s.label} className="p-4 rounded-xl bg-background border border-border">
-                <div className="font-serif text-2xl md:text-3xl text-foreground mb-1">{s.num}</div>
-                <div className="text-xs text-muted-foreground uppercase tracking-wider">{s.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Hero */}
-      {/* Hero */}
-      <section id="top" className="relative overflow-hidden">
-        <div className="max-w-6xl mx-auto px-6 pt-20 pb-24 grid md:grid-cols-2 gap-12 items-center">
-          <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary text-secondary-foreground text-xs font-medium mb-6">
-              <Star className="w-3 h-3 fill-accent text-accent" />
-              Trusted Goodreads Listopia Specialist
-            </div>
-            <h1 className="font-serif text-5xl md:text-6xl leading-[1.05] tracking-tight mb-6">
-              Get Your Book on the Lists Readers <em className="text-accent not-italic">Actually Browse</em>.
-            </h1>
-            <p className="text-lg text-muted-foreground mb-8 max-w-lg">
-              I help authors rank on Goodreads Listopia — the curated lists thousands of readers use every day to discover their next favorite book.
-            </p>
-            <div className="flex flex-wrap gap-3">
-              <Button asChild size="lg" className="bg-foreground text-background hover:bg-foreground/90">
-                <a href="#contact">Book a Free Audit <ArrowRight className="w-4 h-4 ml-1" /></a>
-              </Button>
-              <Button asChild size="lg" variant="outline">
-                <a href="#services">View Services</a>
-              </Button>
-            </div>
-            <div className="flex gap-8 mt-12 pt-8 border-t border-border">
-              <div><div className="font-serif text-2xl">500+</div><div className="text-xs text-muted-foreground">Books Ranked</div></div>
-              <div><div className="font-serif text-2xl">200+</div><div className="text-xs text-muted-foreground">Lists Covered</div></div>
-              <div><div className="font-serif text-2xl">5★</div><div className="text-xs text-muted-foreground">Author Rated</div></div>
-            </div>
-          </div>
-          <div className="relative">
-            <div className="absolute -inset-4 bg-[var(--gradient-warm)] rounded-3xl blur-2xl opacity-20" />
-            <img
-              src={danielImg}
-              alt="Dan Brown, Goodreads Listopia ranking specialist"
-              width={800}
-              height={800}
-              fetchPriority="high"
-              className="relative rounded-3xl w-full object-cover shadow-[var(--shadow-elegant)]"
-            />
           </div>
         </div>
       </section>
