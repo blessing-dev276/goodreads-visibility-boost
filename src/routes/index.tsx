@@ -120,7 +120,7 @@ function Index() {
             <div className="aspect-video w-full rounded-xl overflow-hidden shadow-[var(--shadow-elegant)] border border-background/10 mb-6">
               <iframe
                 className="w-full h-full"
-                src="https://www.youtube.com/embed/KTmMkKiQHQ8?autoplay=1&mute=1&playsinline=1&rel=0"
+                src="https://www.youtube.com/embed/KTmMkKiQHQ8?autoplay=1&playsinline=1&rel=0"
                 title="Author Spotlight Interview — Brandon Huffman, The Power of Faith"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowFullScreen
@@ -156,6 +156,82 @@ function Index() {
         </div>
       </section>
 
+      {/* Testimonials / Social Proof */}
+      <section id="testimonials" className="py-16 bg-secondary/40 border-y border-border">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/15 text-accent text-xs font-medium mb-4">
+              <Star className="w-3 h-3 fill-accent text-accent" />
+              Trusted by Authors Worldwide
+            </div>
+            <h2 className="font-serif text-3xl md:text-4xl tracking-tight mb-3">What Authors Say</h2>
+            <p className="text-muted-foreground max-w-xl mx-auto">Real results from real authors who trusted the process.</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6">
+            <Card className="p-6 border-border bg-card">
+              <div className="flex items-center gap-1 mb-4">
+                {[1,2,3,4,5].map((n) => (<Star key={n} className="w-4 h-4 fill-accent text-accent" />))}
+              </div>
+              <p className="text-sm text-muted-foreground leading-relaxed mb-5">
+                "Dan got my book from page 5 to #1 on a major Listopia list in under 3 weeks. My shelf adds tripled and I saw a direct spike in Kindle sales."
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center text-accent font-serif font-bold text-sm">AL</div>
+                <div>
+                  <p className="text-sm font-medium">Albert Loftus</p>
+                  <p className="text-xs text-muted-foreground">Author, <em>The End of the River</em></p>
+                </div>
+              </div>
+            </Card>
+            <Card className="p-6 border-border bg-card">
+              <div className="flex items-center gap-1 mb-4">
+                {[1,2,3,4,5].map((n) => (<Star key={n} className="w-4 h-4 fill-accent text-accent" />))}
+              </div>
+              <p className="text-sm text-muted-foreground leading-relaxed mb-5">
+                "I had no idea Listopia was this powerful. After the campaign, my book stayed in the top 100 for months. The ROI was incredible."
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center text-accent font-serif font-bold text-sm">RL</div>
+                <div>
+                  <p className="text-sm font-medium">Robert Laurie</p>
+                  <p className="text-xs text-muted-foreground">Author, <em>A Night to Forget</em></p>
+                </div>
+              </div>
+            </Card>
+            <Card className="p-6 border-border bg-card">
+              <div className="flex items-center gap-1 mb-4">
+                {[1,2,3,4,5].map((n) => (<Star key={n} className="w-4 h-4 fill-accent text-accent" />))}
+              </div>
+              <p className="text-sm text-muted-foreground leading-relaxed mb-5">
+                "Professional, transparent, and effective. Dan explained every step and delivered results faster than promised. Highly recommend."
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center text-accent font-serif font-bold text-sm">FJ</div>
+                <div>
+                  <p className="text-sm font-medium">Francisco J. Puche</p>
+                  <p className="text-xs text-muted-foreground">Author, <em>Más Allá del Ictus</em></p>
+                </div>
+              </div>
+            </Card>
+          </div>
+          {/* Credibility Signals */}
+          <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+            {[
+              { num: "500+", label: "Books Ranked" },
+              { num: "200+", label: "Lists Covered" },
+              { num: "98%", label: "Success Rate" },
+              { num: "4.9★", label: "Average Rating" },
+            ].map((s) => (
+              <div key={s.label} className="p-4 rounded-xl bg-background border border-border">
+                <div className="font-serif text-2xl md:text-3xl text-foreground mb-1">{s.num}</div>
+                <div className="text-xs text-muted-foreground uppercase tracking-wider">{s.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Hero */}
       {/* Hero */}
       <section id="top" className="relative overflow-hidden">
         <div className="max-w-6xl mx-auto px-6 pt-20 pb-24 grid md:grid-cols-2 gap-12 items-center">
